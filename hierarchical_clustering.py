@@ -85,7 +85,7 @@ class AgglomerativeClustering():
         agglomerative_schedule = []
 
         elem_count = np.zeros((N, 1), dtype='int')
-        clust_map = np.arange(N, dtype=int)
+        recovered_nodes = np.arange(N, dtype=int)
 
         self.children_ = np.ndarray((N-1, 2), dtype='int')
         self.distances_ = np.ndarray((N-1))
@@ -96,7 +96,7 @@ class AgglomerativeClustering():
         D_masked.fill_value = np.inf
         np.fill_diagonal(D_masked.mask, 1)
 
-        cluster_num = N
+        new_node_label = N
         for k in range(N-1):
             ind_min_flat = np.argmin(D_masked)
             ind_min = np.unravel_index(ind_min_flat, D_masked.shape)
@@ -110,9 +110,10 @@ class AgglomerativeClustering():
                                            D_masked[ind_min].copy(), elem_count[i]))
             self.distances_[k] = D_masked[ind_min]
 
-            self.children_[cluster_num - N, :] = [clust_map[i], clust_map[j]]
-            clust_map[i] = cluster_num
-            cluster_num += 1
+            self.children_[new_node_label - N,
+                           :] = [recovered_nodes[i], recovered_nodes[j]]
+            recovered_nodes[i] = new_node_label
+            new_node_label += 1
 
             D_masked[:, [j]] = ma.masked
             D_masked[[j], :] = ma.masked
