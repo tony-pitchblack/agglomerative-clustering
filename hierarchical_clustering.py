@@ -3,8 +3,6 @@ import numpy as np
 from numpy import ma
 import matplotlib.pyplot as plt
 import matplotlib as mpl
-from scipy.cluster.hierarchy import dendrogram, fcluster
-from sklearn.preprocessing import MinMaxScaler, StandardScaler
 
 from utils import linkage_methods, metric_functions
 from utils import compute_distances, tril_idx
